@@ -1,0 +1,45 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "mysql"
+    url      = env("DATABASE_URL")
+}
+
+model Projects {
+    id        String   @id @default(uuid())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    title     String   @db.VarChar(255)
+    content   String
+    published Boolean  @default(false)
+    author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+    authorId  String
+}
+
+model Institute {
+    id    String @id @default(uuid())
+    name  String
+    email String @unique
+    phone String
+    users User[]
+}
+
+model User {
+    id          String     @id @default(uuid())
+    email       String     @unique
+    name        String
+    phone       String
+    password    String
+    role        Role       @default(USER_INT)
+    projects    Projects[]
+    institute   Institute? @relation(fields: [instituteId], references: [id], onDelete: Cascade)
+    instituteId String?
+}
+
+enum Role {
+    ADMIN
+    USER_INT
+    USER_EXT
+}
