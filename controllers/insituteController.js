@@ -1,5 +1,4 @@
 const { prisma } = require("../db");
-const { connect } = require("../routes");
 
 class instituteController {
   static async createInstitute(req, res) {
@@ -22,11 +21,6 @@ class instituteController {
   static async addUser(req, res) {
     try {
       const { id, userId } = req.body;
-      //   const user = await  prisma.user.findOne({
-      //         where:{
-      //             id:userId
-      //         }
-      //     })
       await prisma.institute.update({
         where: {
           id,
