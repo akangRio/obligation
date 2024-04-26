@@ -35,6 +35,9 @@ class userController {
         where: {
           email,
         },
+        include: {
+          institute: true,
+        },
       });
 
       if (!checkedUser) {
@@ -43,16 +46,116 @@ class userController {
       if (!passValidator(password, checkedUser.password)) {
         throw new Error("please check your input again");
       }
+
       const access_token = signToken({
         userId: checkedUser.id,
         email: checkedUser.email,
         name: checkedUser.name,
         role: checkedUser.role,
+        instituteId: checkedUser.instituteId,
+        instituteType: checkedUser.institute?.instituteType
+          ? checkedUser.institute?.instituteType
+          : null,
       });
 
       res.send(access_token);
     } catch (err) {
       res.send(err.message);
+    }
+  }
+
+  static async getUsers(req, res) {
+    try {
+      const { instituteId, role, instituteType } = req.identity;
+      if (instituteId == null && role !== "ADMIN") {
+        throw new Error(`you haven't assigned into specific institute`);
+      }
+
+      let option = {};
+      if (role == "ADMIN") {
+        option.include = {
+          institute: true,
+        };
+        option.omit = { password: true };
+      } else if (role == "EXCECUTIVE" && instituteType == "INT") {
+        option.include = {
+          institute: true,
+        };
+        option.where = {
+          role: {
+            not: "ADMIN",
+          },
+        };
+        option.omit = { password: true };
+      } else {
+        option.where = {
+          role: {
+            not: "ADMIN",
+          },
+        };
+        option.where = {
+          instituteId: instituteId,
+        };
+        option.include = { institute: true };
+        option.omit = { password: true };
+      }
+
+      const users = await prisma.user.findMany(option);
+      res.send(users);
+    } catch (err) {
+      res.send(err.message);
+    }
+  }
+
+  static async editUser(req, res) {
+    try {
+      const { id, name, email, phone, instituteId, role } = req.body;
+      const editedUser = await prisma.user.update({
+        where: {
+          id,
+        },
+        data: {
+          name,
+          email,
+          phone,
+          instituteId,
+          role,
+        },
+      });
+
+      delete editedUser.password;
+
+      res.send(editedUser);
+    } catch (err) {
+      res.send(err);
+    }
+  }
+
+  static async editUserPassword(req, res) {
+    try {
+      const { id, oldpassword, newPassword } = req.body;
+      const user = await prisma.user.findUnique({
+        where: {
+          id,
+        },
+      });
+      if (!passValidator(oldpassword, user.password)) {
+        throw new Error("wrong password");
+      }
+
+      const hashedPass = hasher(newPassword);
+
+      const updatePassword = await prisma.user.update({
+        where: {
+          id,
+        },
+        data: {
+          password: hashedPass,
+        },
+      });
+      res.send("password has been changed");
+    } catch (err) {
+      res.send(err);
     }
   }
 }

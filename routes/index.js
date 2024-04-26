@@ -9,8 +9,14 @@ router.post("/login", userController.login);
 
 router.use(authenticating);
 
-router.post("/", userController.createUser);
+router.get("/user", userController.getUsers);
+router.post("/user", userController.createUser);
+router.put("/user/edit", userController.editUser);
+router.put("/user/password", userController.editUserPassword);
+
+router.get("/institute", instituteController.getInstitutes);
 router.post("/institute", instituteController.createInstitute);
+router.put("/institute/edit", instituteController.editInstitute);
 router.put("/institute/adduser", instituteController.addUser);
 
 router.use(errorHandler);

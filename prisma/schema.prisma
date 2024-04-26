@@ -1,5 +1,6 @@
 generator client {
-    provider = "prisma-client-js"
+    provider        = "prisma-client-js"
+    previewFeatures = ["omitApi"]
 }
 
 datasource db {
@@ -9,21 +10,26 @@ datasource db {
 
 model Projects {
     id        String   @id @default(uuid())
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
     title     String   @db.VarChar(255)
     content   String
     published Boolean  @default(false)
     author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
     authorId  String
+    isDeleted Boolean  @default(false)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 }
 
 model Institute {
-    id    String @id @default(uuid())
-    name  String
-    email String @unique
-    phone String
-    users User[]
+    id            String        @id @default(uuid())
+    name          String
+    email         String        @unique
+    phone         String
+    users         User[]
+    isDeleted     Boolean       @default(false)
+    instituteType InstituteType @default(EXT)
+    createdAt     DateTime      @default(now())
+    updatedAt     DateTime      @updatedAt
 }
 
 model User {
@@ -32,14 +38,21 @@ model User {
     name        String
     phone       String
     password    String
-    role        Role       @default(USER_INT)
+    role        Role
     projects    Projects[]
     institute   Institute? @relation(fields: [instituteId], references: [id], onDelete: Cascade)
     instituteId String?
+    createdAt   DateTime   @default(now())
+    updatedAt   DateTime   @updatedAt
 }
 
 enum Role {
     ADMIN
-    USER_INT
-    USER_EXT
+    EXCECUTIVE
+    STAFF
+}
+
+enum InstituteType {
+    INT
+    EXT
 }
