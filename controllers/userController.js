@@ -60,7 +60,7 @@ class userController {
 
       res.send(access_token);
     } catch (err) {
-      res.send(err.message);
+      res.status(401).send(err.message);
     }
   }
 
