@@ -66,6 +66,7 @@ class userController {
 
   static async getUsers(req, res) {
     try {
+      const { search } = req.query;
       const { instituteId, role, instituteType } = req.identity;
       if (instituteId == null && role !== "ADMIN") {
         throw new Error(`you haven't assigned into specific institute`);
@@ -77,6 +78,34 @@ class userController {
           institute: true,
         };
         option.omit = { password: true };
+        if (search && search != "") {
+          option.where = {
+            OR: [
+              {
+                name: {
+                  contains: "%" + search + "%",
+                },
+              },
+              {
+                email: {
+                  contains: "%" + search + "%",
+                },
+              },
+              {
+                phone: {
+                  contains: "%" + search + "%",
+                },
+              },
+              {
+                institute: {
+                  name: {
+                    contains: "%" + search + "%",
+                  },
+                },
+              },
+            ],
+          };
+        }
       } else if (role == "EXCECUTIVE" && instituteType == "INT") {
         option.include = {
           institute: true,

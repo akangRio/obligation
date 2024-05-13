@@ -1,6 +1,6 @@
 generator client {
     provider        = "prisma-client-js"
-    previewFeatures = ["omitApi"]
+    previewFeatures = ["omitApi", "fullTextSearch", "fullTextIndex"]
 }
 
 datasource db {
@@ -44,6 +44,10 @@ model User {
     instituteId String?
     createdAt   DateTime   @default(now())
     updatedAt   DateTime   @updatedAt
+
+
+    @@fulltext([name])
+    @@fulltext([name, email])
 }
 
 enum Role {
