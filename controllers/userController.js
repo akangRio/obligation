@@ -19,12 +19,11 @@ class userController {
       });
 
       delete createNewUser.password;
-      delete createNewUser.id;
       delete createNewUser.instituteId;
 
       res.send(createNewUser);
     } catch (err) {
-      res.send(err);
+      res.status(401).send(err);
     }
   }
 

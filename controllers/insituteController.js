@@ -56,7 +56,7 @@ class instituteController {
 
   static async editInstitute(req, res) {
     try {
-      const { id, name, email, phone } = req.body;
+      const { id, name, email, phone, instituteType } = req.body;
       const updateInstitute = await prisma.institute.update({
         where: {
           id,
@@ -65,6 +65,7 @@ class instituteController {
           name,
           email,
           phone,
+          instituteType,
         },
       });
       res.send(updateInstitute);
