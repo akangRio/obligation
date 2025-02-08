@@ -7,7 +7,7 @@ const swaggerOptions: swaggerJsDoc.Options = {
     openapi: "3.0.0",
     info: {
       title: "Obligasi API",
-      version: "1.0.0",
+      version: "1.0.1",
       description: "API documentation for ObligasiApp",
     },
     servers: [
