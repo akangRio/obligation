@@ -18,7 +18,7 @@ async function test() {
         content: "i want to make breakfast, help me makes menu",
       },
     ],
-    store: true,
+    store: true, // Enable storing the completion in the OpenAI API
   });
 
   console.log(completion.choices[0].message);
