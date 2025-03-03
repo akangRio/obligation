@@ -33,7 +33,8 @@ const authenticating = (
 
     next();
   } catch (error) {
-    res.status(401).json({ error: error.message || "Unauthorized" });
+    const errMessage = error instanceof Error ? error.message : "Unauthorized";
+    res.status(500).json({ error: errMessage });
   }
 };
 

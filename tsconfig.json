@@ -3,6 +3,10 @@
     "rootDir": "./src",
     "outDir": "./dist",
     "esModuleInterop": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "target": "ES2015",
+    "module": "CommonJS",
+    "lib": ["ES2015", "DOM"],
+    "strict": true
   }
 }
