@@ -2,8 +2,8 @@ import OpenAI from "openai";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
-  organization: process.env.OPENAI_ORG_ID, // Set this in your .env file
-  project: process.env.OPENAI_PROJECT_ID, // Set this in your .env file
+  organization: process.env.OPENAI_ORG_ID,
+  project: process.env.OPENAI_PROJECT_ID,
 });
 
 export async function createEmbedding(text: string): Promise<number[]> {
