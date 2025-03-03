@@ -8,6 +8,16 @@ const router = Router();
 
 /**
  * @swagger
+ * components:
+ *   securitySchemes:
+ *     BearerAuth:
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
+ */
+
+/**
+ * @swagger
  * tags:
  *   - name: Auth
  *     description: Authentication endpoints
@@ -62,6 +72,8 @@ router.use(authenticating);
  *     summary: Get all users
  *     description: Retrieves a list of all users.
  *     tags: [Users]
+ *     security:
+ *       - BearerAuth: []
  *     parameters:
  *       - in: query
  *         name: search
@@ -89,6 +101,8 @@ router.get("/user", userController.getUsers);
  *     summary: Create a new user
  *     description: Adds a new user to the system.
  *     tags: [Users]
+ *     security:
+ *       - BearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -119,6 +133,8 @@ router.post("/user", userController.createUser);
  *     summary: Edit a user
  *     description: Updates user information.
  *     tags: [Users]
+ *     security:
+ *       - BearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -181,6 +197,8 @@ router.put("/user/password", userController.editUserPassword);
  *     summary: Create an institute
  *     description: Registers a new institute.
  *     tags: [Institutes]
+ *     security:
+ *       - BearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -209,6 +227,8 @@ router.post("/institute", instituteController.createInstitute);
  *     summary: Add a user to an institute
  *     description: Assigns an existing user to an institute.
  *     tags: [Institutes]
+ *     security:
+ *       - BearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -233,6 +253,8 @@ router.put("/institute/adduser", instituteController.addUser);
  *     summary: Get all institutes
  *     description: Retrieves a list of all institutes.
  *     tags: [Institutes]
+ *     security:
+ *       - BearerAuth: []
  *     responses:
  *       200:
  *         description: Successful response
@@ -252,6 +274,8 @@ router.get("/institute", instituteController.getInstitutes);
  *     summary: Edit an institute
  *     description: Updates an institute's information.
  *     tags: [Institutes]
+ *     security:
+ *       - BearerAuth: []
  *     requestBody:
  *       required: true
  *       content:

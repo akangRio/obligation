@@ -5,6 +5,8 @@ import express, { Application } from "express";
 import router from "./routes";
 import cors from "cors";
 import { setupSwagger } from "./config/swagger";
+import uploadRoute from "./routes/uploadRoute";
+import aiRoute from "./routes/aiRoute";
 
 const app: Application = express();
 const port: number = parseInt(process.env.PORT || "3000", 10);
@@ -14,6 +16,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 setupSwagger(app);
 app.use("/", router);
+app.use("/upload", uploadRoute);
+app.use("/ai", aiRoute);
 
 app.listen(port, () => {
   console.log(`This app listening on http://localhost:${port}/`);

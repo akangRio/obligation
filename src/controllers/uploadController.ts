@@ -5,7 +5,6 @@ class UploadController {
   static async uploadImage(req: Request, res: Response): Promise<void> {
     try {
       const { instituteId, role, instituteType } = (req as any).identity;
-      console.log(req.file);
 
       if (!req.file) {
         throw new Error("No file uploaded");

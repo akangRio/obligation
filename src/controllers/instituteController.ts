@@ -35,7 +35,13 @@ class InstituteController {
   static async getInstitutes(req: Request, res: Response) {
     try {
       const institutes = await prisma.institute.findMany({
-        include: { users: true },
+        include: {
+          users: {
+            omit: {
+              password: true,
+            },
+          },
+        },
       });
 
       res.send(institutes);
