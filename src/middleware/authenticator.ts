@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { verifyToken } from "../helpers/jwt";
 
-interface AuthenticatedRequest extends Request {
+export interface AuthenticatedRequest extends Request {
   identity?: any;
 }
 

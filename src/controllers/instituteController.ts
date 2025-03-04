@@ -1,8 +1,12 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { prisma } from "../prisma/db";
 
 class InstituteController {
-  static async createInstitute(req: Request, res: Response) {
+  static async createInstitute(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ) {
     try {
       const { name, email, phone, instituteType } = req.body;
       await prisma.institute.create({
@@ -10,11 +14,11 @@ class InstituteController {
       });
       res.send("ok");
     } catch (err) {
-      res.status(500).send(err);
+      next(err);
     }
   }
 
-  static async addUser(req: Request, res: Response) {
+  static async addUser(req: Request, res: Response, next: NextFunction) {
     try {
       const { id, userId } = req.body;
 
@@ -28,11 +32,11 @@ class InstituteController {
 
       res.send("ok");
     } catch (err) {
-      res.status(500).send(err);
+      next(err);
     }
   }
 
-  static async getInstitutes(req: Request, res: Response) {
+  static async getInstitutes(req: Request, res: Response, next: NextFunction) {
     try {
       const institutes = await prisma.institute.findMany({
         include: {
@@ -46,11 +50,11 @@ class InstituteController {
 
       res.send(institutes);
     } catch (err) {
-      res.status(500).send(err);
+      next(err);
     }
   }
 
-  static async editInstitute(req: Request, res: Response) {
+  static async editInstitute(req: Request, res: Response, next: NextFunction) {
     try {
       const { id, name, email, phone, instituteType } = req.body;
 
@@ -61,7 +65,7 @@ class InstituteController {
 
       res.send(updatedInstitute);
     } catch (err) {
-      res.status(500).send(err);
+      next(err);
     }
   }
 }

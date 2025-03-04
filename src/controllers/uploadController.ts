@@ -1,8 +1,12 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import { supabaseAdminClient, supabaseClient } from "../config/supbaseClient";
 
 class UploadController {
-  static async uploadImage(req: Request, res: Response): Promise<void> {
+  static async uploadImage(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const { instituteId, role, instituteType } = (req as any).identity;
 
@@ -26,7 +30,7 @@ class UploadController {
 
       res.status(200).json({ message: "File uploaded", data });
     } catch (err) {
-      res.status(400).send((err as Error).message);
+      next(err);
     }
   }
 }

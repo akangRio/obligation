@@ -7,6 +7,8 @@ import cors from "cors";
 import { setupSwagger } from "./config/swagger";
 import uploadRoute from "./routes/uploadRoute";
 import aiRoute from "./routes/aiRoute";
+import errorHandler from "./middleware/errorHandler";
+import projectRoute from "./routes/projectRoute";
 
 const app: Application = express();
 const port: number = parseInt(process.env.PORT || "3000", 10);
@@ -18,6 +20,8 @@ setupSwagger(app);
 app.use("/", router);
 app.use("/upload", uploadRoute);
 app.use("/ai", aiRoute);
+app.use("/projects", projectRoute);
+app.use(errorHandler);
 
 app.listen(port, () => {
   console.log(`This app listening on http://localhost:${port}/`);

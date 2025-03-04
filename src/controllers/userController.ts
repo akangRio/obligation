@@ -1,10 +1,10 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import { prisma } from "../prisma/db";
 import { hasher, passValidator } from "../helpers/bcrypt";
 import { signToken } from "../helpers/jwt";
 
 class UserController {
-  static async createUser(req: Request, res: Response) {
+  static async createUser(req: Request, res: Response, next: NextFunction) {
     try {
       const { name, email, phone, role, password } = req.body;
       const hashedPass = hasher(password);
@@ -24,11 +24,11 @@ class UserController {
 
       res.send(safeUser);
     } catch (err) {
-      res.status(401).send((err as Error).message);
+      next(err);
     }
   }
 
-  static async login(req: Request, res: Response) {
+  static async login(req: Request, res: Response, next: NextFunction) {
     try {
       const { email, password } = req.body;
       const checkedUser = await prisma.user.findUnique({
@@ -51,11 +51,11 @@ class UserController {
 
       res.send({ access_token });
     } catch (err) {
-      res.status(401).send((err as Error).message);
+      next(err);
     }
   }
 
-  static async getUsers(req: Request, res: Response) {
+  static async getUsers(req: Request, res: Response, next: NextFunction) {
     try {
       const { search } = req.query;
       const { instituteId, role, instituteType } = (req as any).identity;
@@ -89,11 +89,11 @@ class UserController {
       const users = await prisma.user.findMany(options);
       res.send(users);
     } catch (err) {
-      res.status(400).send((err as Error).message);
+      next(err);
     }
   }
 
-  static async editUser(req: Request, res: Response) {
+  static async editUser(req: Request, res: Response, next: NextFunction) {
     try {
       const { id, name, email, phone, instituteId, role } = req.body;
       const editedUser = await prisma.user.update({
@@ -104,11 +104,15 @@ class UserController {
       const { password: _, ...safeUser } = editedUser;
       res.send(safeUser);
     } catch (err) {
-      res.status(400).send((err as Error).message);
+      next(err);
     }
   }
 
-  static async editUserPassword(req: Request, res: Response) {
+  static async editUserPassword(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ) {
     try {
       const { id, oldPassword, newPassword } = req.body;
       const user = await prisma.user.findUnique({ where: { id } });
@@ -126,7 +130,7 @@ class UserController {
 
       res.send("Password has been changed");
     } catch (err) {
-      res.status(400).send((err as Error).message);
+      next(err);
     }
   }
 }

@@ -2,7 +2,6 @@ import { Router } from "express";
 import userController from "../controllers/userController";
 import instituteController from "../controllers/instituteController";
 import authenticating from "../middleware/authenticator";
-import errorHandler from "../middleware/errorHandler";
 
 const router = Router();
 
@@ -298,7 +297,5 @@ router.get("/institute", instituteController.getInstitutes);
  *         description: Institute updated successfully
  */
 router.put("/institute/edit", instituteController.editInstitute);
-
-router.use(errorHandler);
 
 export default router;

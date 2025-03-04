@@ -1,8 +1,8 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import { createEmbedding } from "../helpers/embeddingHelper";
 import { prisma } from "../prisma/db";
 class AIController {
-  static async chatBot(req: Request, res: Response) {
+  static async chatBot(req: Request, res: Response, next: NextFunction) {
     try {
       const queryText = req.body.prompt;
       const queryEmbedding = await createEmbedding(queryText);
@@ -29,8 +29,7 @@ class AIController {
 
       res.json(filtered);
     } catch (err) {
-      console.error("❌ Error in chatBot:", err);
-      res.status(500).json({ error: "Internal Server Error" });
+      next(err);
     }
   }
 }
