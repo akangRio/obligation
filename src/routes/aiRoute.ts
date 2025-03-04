@@ -7,7 +7,7 @@ aiRoute.use(authenticating);
 
 /**
  * @swagger
- * /chatbot:
+ * /ai/chatbot:
  *   post:
  *     summary: Chat with the AI
  *     description: Chat with the AI

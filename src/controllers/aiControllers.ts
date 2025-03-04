@@ -25,8 +25,9 @@ class AIController {
           ORDER BY embedding <-> ${queryEmbedding}::vector
           LIMIT 5;
         `;
+      const filtered = result.filter((project) => project.similarity < 1.25);
 
-      res.json(result);
+      res.json(filtered);
     } catch (err) {
       console.error("❌ Error in chatBot:", err);
       res.status(500).json({ error: "Internal Server Error" });
